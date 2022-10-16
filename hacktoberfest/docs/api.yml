@@ -5,7 +5,7 @@ info:
 servers:
   - url: https://library-management.com
 security:
-  - BasicAuth: []
+  - BearerAuth: []
 paths:
   /ping: 
     get: 
@@ -29,24 +29,55 @@ paths:
     put:
       tags:
         - Security
-      summary: Update users if id provided, create them otherwise
+      summary: Update user if id provided, create it otherwise
       requestBody:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/User'
         required: true
       responses:
         200:
-          description: The Created or Updated users
+          description: The Created or Updated user
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+    post:
+      tags:
+        - Security
+      summary: How to get authentication token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: hacktoberfest
+                password:
+                  type: string
+                  example: "*******"
+      responses:
+        200:
+          description: The authentication token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiJ9"
         400:
           description: Bad request
           content:
